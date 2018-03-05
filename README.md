@@ -50,7 +50,7 @@ $ docker build -t go-ok .
 ### Create a [Deployment]
 
 **Running** an [image] will create a [Pod] with one container using the
-[kubectl] command.
+[kubectl] command. See the [kubectl cheatsheet] for a list of common commands.
 
 ```bash
 $ kubectl run go-ok --image=go-ok:v1 --port=8080
@@ -207,6 +207,18 @@ minikube addons open heapster
 You get a [Grafana] web interface with pre-configured dashboards opened
 up in your web browser.
 
+### Export Configuration
+
+Get the YAML configuration for go-ok.
+
+```bash
+# get the deployment
+$ kubectl get deployment go-ok -o yaml --export
+
+# or get the deployment and service
+$ kubectl get deployment,service go-ok -o yaml --export
+```
+
 ### Cleanup
 
 ```bash
@@ -236,6 +248,7 @@ $ minikube delete
 
 [go-ok image]: https://hub.docker.com/r/cjimti/go-ok/
 [kubectl]: https://kubernetes.io/docs/reference/kubectl/overview/
+[kubectl cheatsheet]: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 [minikube command]: https://kubernetes.io/docs/getting-started-guides/minikube/
 [Official Tutorial]: https://kubernetes.io/docs/tutorials/stateless-application/hello-minikube/
 [Image]: https://kubernetes.io/docs/concepts/containers/images/
