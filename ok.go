@@ -22,8 +22,8 @@ func main() {
 			"uuid_call":     instanceUuidV4.String(),
 			"uuid_instance": callUuidV4.String(),
 			"client_ip":     c.ClientIP(),
-			"version":       2,
-			"version_msg":   "version 2",
+			"version":       1,
+			"version_msg":   "version 1",
 		})
 		count++
 	})
