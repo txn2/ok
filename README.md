@@ -6,10 +6,10 @@ useful data for testing and getting started with Kubernetes.
 ## Docker Run
 ```bash
 # run version 1
-docker run --rm -p 8080:8080 GIN_MODE=release cjimti/go-ok:v1
+docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v1
 
 # run version 2
-docker run --rm -p 8080:8080 GIN_MODE=release cjimti/go-ok:v2
+docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v2
 
 ```
 
@@ -100,7 +100,7 @@ Since we used a [Deployment], let's update the [Deployment] with the
 correct image.
 
 ```bash
-$ kubectl set image deployment/go-ok ok-ok=cjimti/go-ok:v1
+$ kubectl set image deployment/go-ok go-ok=cjimti/go-ok:v1
 deployment "go-ok" image updated
 ```
 
