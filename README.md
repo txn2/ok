@@ -211,15 +211,44 @@ up in your web browser.
 
 Get the YAML configuration for go-ok.
 
-```bash
-# get the deployment
-$ kubectl get deployment go-ok -o yaml --export
+### Configuration
 
-# or get the deployment and service
-$ kubectl get deployment,service go-ok -o yaml --export
+Using a declarative model of setting up out service and pods we can
+leverage version control and have a more stable way of describing the
+system to others and Kubernetes.
+
+Rather than type a configuration file from scratch we can export the
+current [Deployment] and take advantage of the work we have already done.
+
+
+```bash
+# get the deployment and service in one file
+$ kubectl get deployment,service go-ok -o yaml --export >k8s-dev-local.yml
 ```
 
-### Cleanup
+We can remove the key `nodePort: 30712` from the [Service] definition. The
+port number will be different for you since this port was randomly generated
+when we created the service. Allowing Kubernetes to assign a random port  is
+useful for others who may be running of other service and may be using that
+that port in their Minikube.
+
+#### Testing Configuration
+
+Since the configuration file matches our current [Deployment] we can use it
+to delete the [Deployment]
+
+```bash
+$ kubectl delete -f k8s-dev-local.yml
+```
+
+Re-create the deployment using the new configuration file:
+
+```bash
+$ kubectl create -f k8s-dev-local.yml
+```
+
+
+### Manual Cleanup
 
 ```bash
 # Delete service and deployment
