@@ -1,6 +1,6 @@
 # GO OK
 
-A Simple go web server that returns a bit of useful data for testing
+A Simple go web server listening on port **8080** that returns a bit of useful data for testing
 Kubernetes nodes.
 
 ## Docker Run
