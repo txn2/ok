@@ -6,12 +6,10 @@ Kubernetes nodes.
 ## Run
 
 ```bash
-
 go get github.com/gin-gonic/gin
 go get github.com/nu7hatch/gouuid
 
 GIN_MODE=release go run ./ok.go
-
 ```
 
 ## Build Docker Container
