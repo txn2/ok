@@ -222,8 +222,9 @@ $ kubectl get deployment,service go-ok -o yaml --export
 ### Cleanup
 
 ```bash
-$ kubectl delete service hello-node
-$ kubectl delete deployment hello-node
+# Delete service and deployment
+$ kubectl delete service go-ok
+$ kubectl delete deployment go-ok
 
 # Optionally, force removal of the Docker images created:
 
