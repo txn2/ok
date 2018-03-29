@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "go-ok-service"
+  labels:
+    app: go-ok-service
+    system: example
+spec:
+  selector:
+    app: "go-ok"
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  type: NodePort

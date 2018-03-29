@@ -11,6 +11,9 @@ docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v1
 # run version 2
 docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v2
 
+# run version 3
+docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v3
+
 ```
 
 Browse to http://localhost:8080
@@ -191,7 +194,7 @@ Open the [Kubernetes Dashboard] with `minikube`:
 $ minikube dashboard
 ```
 
-View the [Pod]s and [Services] via command line:
+View the [Pod]s and [Services] for the system namespace:
 
 ```bash
 $ kubectl get po,svc -n kube-system
@@ -208,6 +211,12 @@ You get a [Grafana] web interface with pre-configured dashboards opened
 up in your web browser.
 
 ### Export Configuration
+
+View the [Pod]s and [Services] for the default:
+
+```bash
+$ kubectl get po,svc
+```
 
 Get the YAML configuration for go-ok.
 
