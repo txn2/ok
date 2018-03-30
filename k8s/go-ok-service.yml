@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: "go-ok-service"
   labels:
-    app: go-ok-service
+    app: go-ok
     system: example
 spec:
   selector:
