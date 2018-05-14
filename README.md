@@ -1,18 +1,12 @@
-# GO OK
+# OK
 
-A Simple go web server listening on port **8080** that returns a bit of
-useful data for testing and getting started with Kubernetes.
+A Simple web server listening on port **8080** that returns a bit of
+useful data for testing and diagnosing ingress with Kubernetes.
 
 ## Docker Run
 ```bash
-# run version 1
-docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v1
-
-# run version 2
-docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v2
-
-# run version 3
-docker run --rm -p 8080:8080 -e GIN_MODE=release cjimti/go-ok:v3
+# run
+docker run --rm -p 8080:8080 -e txn2/ok
 
 ```
 
@@ -34,16 +28,13 @@ Browse to http://localhost:8080
 ## Run Source
 
 ```bash
-go get github.com/gin-gonic/gin
-go get github.com/nu7hatch/gouuid
-
-GIN_MODE=release go run ./ok.go
+go run ./ok.go
 ```
 
 ## Build Docker [Container]
 
 ```bash
-$ docker build -t go-ok .
+$ docker build -t ok .
 ```
 
 ## Kubernetes Scripted
@@ -56,7 +47,7 @@ $ docker build -t go-ok .
 [kubectl] command. See the [kubectl cheatsheet] for a list of common commands.
 
 ```bash
-$ kubectl run go-ok --image=go-ok:v1 --port=8080
+$ kubectl run ok --image=ok --port=8080
 ```
 
 View the [Deployment]:
@@ -64,7 +55,7 @@ View the [Deployment]:
 ```bash
 $ kubectl get deployments
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-go-ok     1         1         1            0           2m
+ok        1         1         1            0           2m
 ```
 
 Looks like we have a problem since **0** [Pod]s are available. There are
@@ -80,7 +71,7 @@ View the [Pod]s:
 ```bash
 $ kubectl get pods
 NAME                     READY     STATUS             RESTARTS   AGE
-go-ok-8645cf567d-8zc62   0/1       ImagePullBackOff   0          22m
+ok-8645cf567d-8zc62      0/1       ImagePullBackOff   0          22m
 ```
 
 The the Pod status reports ImagePullBackOff (see [Pod Lifecycle]) and is
@@ -103,8 +94,8 @@ Since we used a [Deployment], let's update the [Deployment] with the
 correct image.
 
 ```bash
-$ kubectl set image deployment/go-ok go-ok=cjimti/go-ok:v1
-deployment "go-ok" image updated
+$ kubectl set image deployment/ok go-ok=txn2/ok
+deployment "ok" image updated
 ```
 
 View the [Deployment] status:
@@ -112,14 +103,14 @@ View the [Deployment] status:
 ```bash
 $ kubectl get deployments
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-go-ok     1         1         1            1           1h
+ok        1         1         1            1           1h
 ```
 
 View the status of our [Pod]s:
 
 ```bash
 NAME                     READY     STATUS    RESTARTS   AGE
-go-ok-54c5f4d58f-gmzn2   1/1       Running   0          1m
+ok-54c5f4d58f-gmzn2      1/1       Running   0          1m
 ```
 
 Get a list of the latest Kubernetes events:
@@ -137,21 +128,14 @@ and a policy by which to access them - sometimes called a micro-service."
 --Official [Service] Documentation
 
 ```bash
-$ kubectl expose deployment go-ok --type=LoadBalancer
-service "go-ok" exposed
+$ kubectl expose deployment ok --type=NodePort
+service "ok" exposed
 ```
-
-> The --type=[LoadBalancer] flag indicates that you want to expose your
-Service outside of the cluster. On cloud providers that support load
-balancers, an external IP address would be provisioned to access the Service.
-On Minikube, the [LoadBalancer] type makes the [Service] accessible through
-the minikube service command.
---[Official Tutorial]
 
 ```bash
 $ kubectl get services
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-go-ok        LoadBalancer   10.111.21.238   <pending>     8080:31825/TCP   2m
+ok           NodePort       10.111.21.238   <none>        8080:31825/TCP   2m
 kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP          3d
 
 ```
@@ -232,7 +216,7 @@ current [Deployment] and take advantage of the work we have already done.
 
 ```bash
 # get the deployment and service in one file
-$ kubectl get deployment,service go-ok -o yaml --export >k8s-dev-local.yml
+$ kubectl get deployment,service ok -o yaml --export >k8s-dev-local.yml
 ```
 
 We can remove the key `nodePort: 30712` from the [Service] definition. The
@@ -261,21 +245,8 @@ $ kubectl create -f k8s-dev-local.yml
 
 ```bash
 # Delete service and deployment
-$ kubectl delete service go-ok
-$ kubectl delete deployment go-ok
-
-# Optionally, force removal of the Docker images created:
-
-$ docker rmi go-ok:v1 go-ok:v2 -f
-
-# Optionally, stop the Minikube VM:
-
-$ minikube stop
-$ eval $(minikube docker-env -u)
-
-# Optionally, delete the Minikube VM:
-$ minikube delete
-
+$ kubectl delete service ok
+$ kubectl delete deployment ok
 ```
 
 ## Next Steps
@@ -285,7 +256,7 @@ $ minikube delete
 
 ---
 
-[go-ok image]: https://hub.docker.com/r/cjimti/go-ok/
+[ok image]: https://hub.docker.com/r/txn2/ok/
 [kubectl]: https://kubernetes.io/docs/reference/kubectl/overview/
 [kubectl cheatsheet]: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 [minikube command]: https://kubernetes.io/docs/getting-started-guides/minikube/

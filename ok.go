@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nu7hatch/gouuid"
+	"github.com/gin-contrib/zap"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -18,8 +20,18 @@ func main() {
 	podNamespace := os.Getenv("POD_NAMESPACE")
 	podIP := os.Getenv("POD_IP")
 	serviceAccountName := os.Getenv("SERVICE_ACCOUNT")
+	port, ok := os.LookupEnv("PORT")
+	if ok != true {
+		port = "8080"
+	}
 
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+
+	r := gin.New()
+
+	logger, _ := zap.NewProduction()
+	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+
 	r.GET("/", func(c *gin.Context) {
 		instanceUuidV4, _ := uuid.NewV4()
 
@@ -31,14 +43,14 @@ func main() {
 			"uuid_instance":   callUuidV4.String(),
 			"client_ip":       c.ClientIP(),
 			"version":         3,
-			"version_msg":     "version 3",
+			"version_msg":     "version 1",
 			"node_name":       nodeName,
 			"pod_name":        podName,
-			"pod_namepage":    podNamespace,
+			"pod_namespace":   podNamespace,
 			"pod_ip":          podIP,
 			"service_account": serviceAccountName,
 		})
 		count++
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Run(":" + port)
 }
