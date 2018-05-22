@@ -5,12 +5,14 @@ metadata:
   labels:
     app: ok
     system: test
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: ok.txn2.com
+  - host: ok.la.txn2.net
     http:
       paths:
       - backend:
-          serviceName: ok
+          serviceName: "ok"
           servicePort: 8080
         path: /
