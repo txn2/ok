@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ok
+  labels:
+    app: ok
+    system: test
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: ok.la.txn2.net
+    http:
+      paths:
+      - backend:
+          serviceName: "ok"
+          servicePort: 8080
+        path: /
