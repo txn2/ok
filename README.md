@@ -19,9 +19,7 @@ Browse to http://localhost:8080
     "message": "ok",
     "time": "2018-03-05T08:38:03.936996398Z",
     "uuid_call": "dddb3561-7273-45ee-5f80-7b022d2bf2e9",
-    "uuid_instance": "79defbd7-690e-4fc7-5652-354e1662ff7c",
-    "version": 2,
-    "version_msg": "version 2"
+    "uuid_instance": "79defbd7-690e-4fc7-5652-354e1662ff7c"
 }
 ```
 
