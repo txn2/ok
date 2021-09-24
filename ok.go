@@ -1,9 +1,9 @@
 package main
 
 import (
-	"time"
-
+	"net/http"
 	"os"
+	"time"
 
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -11,24 +11,22 @@ import (
 	"go.uber.org/zap"
 )
 
+var (
+	nodeName     = getEnv("NODE_NAME", "undefined")
+	podName      = getEnv("POD_NAME", "undefined")
+	podNamespace = getEnv("POD_NAMESPACE", "undefined")
+	podIP        = getEnv("POD_IP", "undefined")
+	port         = getEnv("PORT", "8080")
+	ip           = getEnv("IP", "127.0.0.1")
+	message      = getEnv("MESSAGE", "ok")
+)
+
+var Version = "0.0.0"
+var Service = "ok"
+
 func main() {
 	count := 1
 	callUuidV4, _ := uuid.NewV4()
-
-	nodeName := os.Getenv("NODE_NAME")
-	podName := os.Getenv("POD_NAME")
-	podNamespace := os.Getenv("POD_NAMESPACE")
-	podIP := os.Getenv("POD_IP")
-
-	port, ok := os.LookupEnv("PORT")
-	if ok != true {
-		port = "8080"
-	}
-
-	message, ok := os.LookupEnv("MESSAGE")
-	if ok != true {
-		port = "ok"
-	}
 
 	gin.SetMode(gin.ReleaseMode)
 
@@ -56,5 +54,34 @@ func main() {
 		count++
 	})
 
-	r.Run(":" + port)
+	logger.Info("Starting "+Service+" API Server",
+		zap.String("version", Version),
+		zap.String("type", "server_startup"),
+		zap.String("port", port),
+		zap.String("ip", ip),
+	)
+
+	s := &http.Server{
+		Addr:           ip + ":" + port,
+		Handler:        r,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20, // 1 MB
+	}
+
+	err := s.ListenAndServe()
+	if err != nil {
+		logger.Fatal(err.Error())
+	}
+}
+
+// getEnv gets an environment variable or sets a default if
+// one does not exist.
+func getEnv(key, fallback string) string {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return fallback
+	}
+
+	return value
 }
